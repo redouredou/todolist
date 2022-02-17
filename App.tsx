@@ -1,4 +1,12 @@
 import * as React from "react";
+import { TodoInput } from "./todos/TodoInput";
+import { TodoList } from "./todos/TodoList";
 
 
-export const App = () => <div>{'React setup from scratch with Typescript :D'}</div>
+
+export const App: React.FC = () => {
+    return <>
+        <TodoInput/> 
+        <TodoList/>
+    </>
+}
