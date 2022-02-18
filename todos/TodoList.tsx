@@ -1,18 +1,15 @@
 import * as React from 'react';
 
-interface State {
+interface TodoListProps {
     items: string[]
 }
 
-export const TodoList: React.FC = () => 
+export const TodoList: React.FC<TodoListProps> = ({items} : TodoListProps) => 
 {
-    const [state, useState] = React.useState<State>({
-        items: ['hello', 'bonjour', 'salut']
-    })
 
-    return <ul>
-        {state.items && state.items.map(item => {
-            return <li>{item}</li>
+    return items && <ul>
+        {items.map((item,index) => {
+            return <li key={index}>{item}</li>
         })}
     </ul>
 }
