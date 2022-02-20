@@ -20,22 +20,18 @@ export const TodoInput: React.FC<Props> = props => {
 
 
     const updateItemValue = (addItem: React.Dispatch<React.SetStateAction<State>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
-       const itemValue1 = e.target.value;
-       addItem({itemValue: itemValue1})
+       const newItemValue = e.target.value;
+       addItem({itemValue: newItemValue})
     }
 
     const onAddButton : any = (updateTodoListFunc : any) => (e: React.MouseEventHandler<HTMLButtonElement>) =>  {
-        updateTodoListFunc([...props.items, state.itemValue])
+        state.itemValue && updateTodoListFunc([...props.items, state.itemValue]);
+        useState({itemValue: ""});
     }
-    
-    const sendMessage = () => {
-        alert('hi');
-      }
-
-
+  
     return <>
         <h2> Which task do you want add?</h2>
-        <input type="text" id="input_todo" onChange={updateItemValue(useState)}></input>
-        <button id="button_submit" onClick={onAddButton(props.updateTodoList)}>Add</button>
+        <input type="text" id="input_todo" value={state.itemValue} onChange={updateItemValue(useState)}></input>
+        <button name="button_submit" onClick={onAddButton(props.updateTodoList)}>Add</button>
     </>
 }
