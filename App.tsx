@@ -3,8 +3,13 @@ import { sources } from "webpack";
 import { TodoInput } from "./todos/TodoInput";
 import { TodoList } from "./todos/TodoList";
 
+type Item = {
+    id: number
+    value : string
+}
+
 interface State {
-    items?: string[]
+    items?: Item[]
 }
 
 export const App: React.FC = () => {
@@ -13,18 +18,19 @@ export const App: React.FC = () => {
         items: []
     })
 
-    const update = (newTodoList: string[]) => {
+    const updateTodoList = (newTodoList: Item[]) => {
         useState({items : newTodoList})
     }
 
-    const deleteTodo = (index : number) => {
-        state.items.splice(index, 1)
-        useState({items : [...state.items]})
+    const deleteTodo = (newTodoList: Item[]) => {
+        //const indexsOfItems = state.items.map((item, index) => index);
+        //const newArray = state.items.filter(element => indexsOfItems.indexOf(index) !== index);
+        useState({items : newTodoList})
     }
 
 
     return <>
-        <TodoInput items={state.items} updateTodoList={update} /> 
-        <TodoList items={state.items} deleteTodo={deleteTodo} />
+        <TodoInput items={state.items} updateTodoList={updateTodoList} /> 
+        <TodoList items={state.items} updateTodoList={updateTodoList} deleteTodo={deleteTodo} />
     </>
 }

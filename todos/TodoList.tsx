@@ -1,17 +1,32 @@
 import * as React from 'react';
 import { TodoItem } from './TodoItem';
+
+
+type Item = {
+    id: number
+    value : string
+}
 interface TodoListProps {
-    items: string[]
-    deleteTodo: (arg: number) => void
+    items: Item[]
+    deleteTodo: (arg: Item[]) => void
+    updateTodoList: (arg: Item[]) => void
 }
 
-export const TodoList: React.FC<TodoListProps> = ({items, deleteTodo} : TodoListProps) => 
+
+export const TodoList: React.FC<TodoListProps> = ({items, updateTodoList} : TodoListProps) => 
 {
 
-    return items && <div>
-        {items.map((item,index) => {
-            //return <li key={index}>{item}</li>
-            return <TodoItem item={item} index={index} deleteTodo = {deleteTodo} />
+    const removeTodoById = (id: number) => {
+        const newItems = [...items].filter(item => item.id != id)
+        updateTodoList(newItems)
+    }
+
+
+    return items && <ul>
+        {items.map((item) => {
+            return <li key={item.id}>
+                    <TodoItem item={item.value} id={item.id} isEdit={false} removeTodoById={removeTodoById} />
+                </li>
         })}
-    </div>
+    </ul>
 }
