@@ -1,0 +1,28 @@
+html, body, #root{
+    margin: 0;
+    height: 100%;
+    
+}
+
+body, button{
+    font-family: 'Expose-Medium', serif;
+}
+
+ul{
+    list-style-type:none 
+}
+
+
+@font-face {
+    font-family: 'Expose-Medium';
+    src: local('Expose-Medium'), url(./fonts/Expose-Black.woff) format('woff');
+   
+}
+
+.app-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+}
