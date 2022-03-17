@@ -1,10 +1,8 @@
-import * as React from 'react';
+import {useRef, useEffect} from 'react';
 import { Item } from './model/item';
 import { TodoItem } from './TodoItem';
 import { FC } from 'react'
 import style from './todos.module.css';
-
-
 
 
 type TodoListProps = {
@@ -14,6 +12,13 @@ type TodoListProps = {
 
 export const TodoList: FC<TodoListProps> = ({items, updateTodoList} : TodoListProps) => 
 {
+    const prevItems = useRef<Item[]>();
+
+    useEffect(() => {
+        prevItems.current = items;
+    });
+
+    const isFirstAddItem = prevItems && prevItems.current && (prevItems.current.length < items.length);
 
 
     const removeTodoById = (id: number) => {
@@ -51,7 +56,7 @@ export const TodoList: FC<TodoListProps> = ({items, updateTodoList} : TodoListPr
     
     return items && <ul>
         {items.map((item, index) => {
-            return <li key={item.id} className={style["grid-todo-item"]} >
+            return <li key={item.id} className={`${style["grid-todo-item"]} ${isFirstAddItem && index === items.length-1 && style["li-slide"]}`}>
                     <TodoItem 
                         value={item.value} 
                         id={item.id} 

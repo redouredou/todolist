@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { FC,useState, Dispatch, SetStateAction} from 'react'
 import { EditingTodoInput } from './EditingTodoInput'
 import style from './todos.module.css'
@@ -35,7 +34,7 @@ export const TodoItem: FC<TodoItemProps> = ({value, id, isEdit, removeTodoById, 
     )
 
     return <>
-        <div className={style['grid-todo-value']} >{state.isEdit ? <EditingTodoInput currentValue={value} setStateTodoItem={setState} /> : <span className={style["todo-value"]} >{state.todoValue}</span>}</div>
+        <div className={style['grid-todo-value']} >{state.isEdit ? <EditingTodoInput currentValue={state.todoValue} setStateTodoItem={setState} /> : <span className={style["todo-value"]} >{state.todoValue}</span>}</div>
         <div className={style['grid-todo-buttons']}>
         {!state.isEdit && <button type="button" name="modify_button" onClick={() => editTodo(setState)}>Edit</button>}
         <button type="button" name="delete_button"  className= {style['scale-up']} onClick={() => removeTodoById(id)} >Delete</button>

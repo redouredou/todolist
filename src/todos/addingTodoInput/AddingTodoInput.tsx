@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { FC,useState, Dispatch, SetStateAction, ChangeEvent, KeyboardEvent } from 'react'
+import { FC, useState, Dispatch, SetStateAction, ChangeEvent, KeyboardEvent } from 'react'
 import { Item } from '../model/item';
 import style from './addingTodo.module.css'
 

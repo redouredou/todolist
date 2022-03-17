@@ -1,4 +1,3 @@
-import * as React from "react";
 import {FC, useState} from "react";
 import { AddingTodoInput } from "./todos/addingTodoInput/AddingTodoInput";
 import { TodoList } from "./todos/TodoList";
