@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Item } from './model/item';
 import { TodoItem } from './TodoItem';
+import { FC } from 'react'
+import style from './todos.module.css';
 
 
-interface TodoListProps {
+
+
+type TodoListProps = {
     items: Item[]
     updateTodoList: (arg: Item[]) => void
 }
 
-export const TodoList: React.FC<TodoListProps> = ({items, updateTodoList} : TodoListProps) => 
+export const TodoList: FC<TodoListProps> = ({items, updateTodoList} : TodoListProps) => 
 {
 
 
@@ -47,7 +51,7 @@ export const TodoList: React.FC<TodoListProps> = ({items, updateTodoList} : Todo
     
     return items && <ul>
         {items.map((item, index) => {
-            return <li key={item.id}>
+            return <li key={item.id} className={style["grid-todo-item"]} >
                     <TodoItem 
                         value={item.value} 
                         id={item.id} 

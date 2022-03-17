@@ -8,8 +8,19 @@ body, button{
     font-family: 'Expose-Medium', serif;
 }
 
-ul{
-    list-style-type:none 
+button{
+    margin-left: 10px;
+    width: 100px;
+    background-color: black;
+    color: white
+}
+
+h2{
+    margin-right: 40px;
+}
+
+span{
+    font-size: x-large;
 }
 
 

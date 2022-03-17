@@ -1,13 +1,16 @@
 import * as React from 'react'
+import { FC,useState, Dispatch, SetStateAction} from 'react'
 import { EditingTodoInput } from './EditingTodoInput'
+import style from './todos.module.css'
 
 
-interface TodoItemState {
+type TodoItemState = {
     isEdit: boolean
     todoValue: string
     todoValueInput: string
 }
-interface TodoItemProps {
+
+type TodoItemProps = {
     isEdit: boolean
     value: string
     id: number
@@ -15,28 +18,29 @@ interface TodoItemProps {
     index: number
     moveUp: (index: number) => void
     moveDown: (index: number) => void
-
 }
 
-const editTodo = (updateTodoItemState: React.Dispatch<React.SetStateAction<TodoItemState>>) => {
+const editTodo = (updateTodoItemState: Dispatch<SetStateAction<TodoItemState>>) => {
     updateTodoItemState(prevState => ({ ...prevState, isEdit: true }))
 }
 
-export const TodoItem: React.FC<TodoItemProps> = (props) => {
+export const TodoItem: FC<TodoItemProps> = ({value, id, isEdit, removeTodoById, index, moveUp, moveDown}) => {
 
-    const [state, useState] = React.useState<TodoItemState>(
+    const [state, setState] = useState<TodoItemState>(
         {
-            isEdit: props.isEdit,
-            todoValue: props.value,
+            isEdit,
+            todoValue: value,
             todoValueInput: ''
         }
     )
 
     return <>
-        {state.isEdit ? <EditingTodoInput currentValue={props.value} useStateTodoItem={useState} /> : state.todoValue} 
-        {!state.isEdit && <button type="button" name="modify_button" onClick={() => editTodo(useState)}>Edit</button>}
-        <button type="button" name="delete_button" onClick={() => props.removeTodoById(props.id)} >Delete</button>
-        <button type="button" name="moveUp_button" onClick={() => props.moveUp(props.index)} >UP</button>
-        <button type="button" name="moveDown_button" onClick={() => props.moveDown(props.index)} >DOWN</button>
+        <div className={style['grid-todo-value']} >{state.isEdit ? <EditingTodoInput currentValue={value} setStateTodoItem={setState} /> : <span className={style["todo-value"]} >{state.todoValue}</span>}</div>
+        <div className={style['grid-todo-buttons']}>
+        {!state.isEdit && <button type="button" name="modify_button" onClick={() => editTodo(setState)}>Edit</button>}
+        <button type="button" name="delete_button"  className= {style['scale-up']} onClick={() => removeTodoById(id)} >Delete</button>
+        <button type="button" name="moveUp_button" className= {style['scale-up']} onClick={() => moveUp(index)} >UP</button>
+        <button type="button" name="moveDown_button" className= {style['scale-up']} onClick={() => moveDown(index)} >DOWN</button>
+        </div>
     </>
 }

@@ -1,14 +1,9 @@
 import * as React from 'react'
-import { FC, useState} from 'react'
+import { FC,useState, Dispatch, SetStateAction, ChangeEvent, KeyboardEvent } from 'react'
 import { Item } from '../model/item';
 import style from './addingTodo.module.css'
 
-interface State {
-    value: string
-    id?: number
-}
-
-interface Props {
+type Props = {
     items: Item[]
     updateTodoList: (arg : Item[]) => void;
 }
@@ -24,12 +19,11 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
     let {value, id} = item;
 
 
-    const updateItemValue = (addItem: React.Dispatch<React.SetStateAction<State>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
-       const newItemValue = e.target.value;
-       addItem(prevState => ({...prevState, value: newItemValue}))
+    const updateItemValue = (addItem: Dispatch<SetStateAction<Item>>) => (e: ChangeEvent<HTMLInputElement>) => {
+       addItem(prevState => ({...prevState, value: e.target.value}))
     }
 
-    const onAddButton : any = (updateTodoListFunc : any) => (e: React.MouseEventHandler<HTMLButtonElement>) =>  {
+    const onAddButton = (updateTodoListFunc : any) => () =>  {
         const newItem = {
             id: id++,
             value
@@ -38,6 +32,18 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
         value && updateTodoListFunc([...items, newItem]);
         setItem({value: "", id: id++});
     }
+
+    const onEnterPress = (updateTodoListFunc: (arg : Item[]) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
+        if(event.key === 'Enter'){
+            const newItem = {
+                id: id++,
+                value
+            }
+    
+            value && updateTodoListFunc([...items, newItem]);
+            setItem({value: "", id: id++});
+        }
+    }
   
     return <div className={style.container}>
         <h2> Which task do you want to add?</h2>
@@ -45,10 +51,13 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
             type="text" 
             id="input_todo" 
             value={value} 
-            onChange={updateItemValue(setItem)}>
+            onChange={updateItemValue(setItem)}
+            onKeyPress={onEnterPress(updateTodoList)}
+            >
         </input>
         <button 
-            name="button_submit" 
+            name="button_submit"
+            className= {style['scale-up']}
             onClick={onAddButton(updateTodoList)}>Add</button>
     </div>
 }
