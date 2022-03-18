@@ -1,10 +1,13 @@
-import {FC, useState} from "react";
+import {createContext, FC, useState, useEffect} from "react";
 import { AddingTodoInput } from "./todos/addingTodoInput/AddingTodoInput";
 import { TodoList } from "./todos/TodoList";
-import { Item } from "./todos/model/Item";
+import { Item } from "./todos/model/item";
+import { Notification } from "./todos/model/notification";
 import styles from "./app.module.css";
+import { NotificationPopup } from "./todos/notification/notificationPopup";
 
 
+export const NotificationContext = createContext<any>(undefined);
 
 export const TodoApp: FC = () => {
 
@@ -12,10 +15,19 @@ export const TodoApp: FC = () => {
 
     const updateTodoList = (newTodoList: Item[]) => setItems(newTodoList)
 
+    const [notification, setNotification] = useState<Notification>({
+        isShowing: false,
+        taskName: '',
+        todoEvent: null
+    });
+
     return <div className={styles['app-root']}>
         <div className={styles['app-container']}>
-            <AddingTodoInput items={items} updateTodoList={updateTodoList} /> 
-            <TodoList items={items} updateTodoList={updateTodoList} />
+        {notification.isShowing && <NotificationPopup notification={notification} setNotification={setNotification}/>}
+            <NotificationContext.Provider value={setNotification}>
+                <AddingTodoInput items={items} updateTodoList={updateTodoList} />
+                <TodoList items={items} updateTodoList={updateTodoList} />
+            </NotificationContext.Provider>
         </div>
     </div>
 }

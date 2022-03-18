@@ -12,9 +12,14 @@ li{
     margin: 10px;
 }
 
-.li-slide{
+.li-add-slide{
     animation: add-slide 0.4s;
 }
+
+.li-remove-slide{
+    animation: remove-slide 0.4s;
+}
+
 
 
 @-webkit-keyframes add-slide {
@@ -48,6 +53,41 @@ li{
         opacity: 1;
     }
   }
+
+  @-webkit-keyframes remove-slide {
+    0% {
+              opacity: 1;
+              -webkit-transform: translate(0, 30px);
+              transform: translate(0, 30px);
+    }
+    
+    60% { opacity: 0.9; }
+    
+    80% { opacity: 0.5; }
+
+    100%{
+        opacity: 0;
+    }
+    
+  }
+  @keyframes remove-slide {
+    0% {
+        opacity: 1;
+        -webkit-transform: translate(0, 30px);
+        transform: translate(0, 30px);
+    }
+    
+    60% { opacity: 0.9; }
+    
+    80% { opacity: 0.5; }
+
+    100%{
+        opacity: 0;
+    }
+  }
+
+
+
 
 .grid-todo-item{
     display: grid;

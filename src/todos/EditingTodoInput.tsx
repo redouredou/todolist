@@ -1,4 +1,4 @@
-import { FC,useState, Dispatch, SetStateAction, ChangeEvent, useRef, useEffect} from 'react'
+import { FC,useState, Dispatch, SetStateAction, ChangeEvent } from 'react'
 
 type TodoItemState = {
     isEdit: boolean

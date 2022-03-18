@@ -1,6 +1,10 @@
-import { FC, useState, Dispatch, SetStateAction, ChangeEvent, KeyboardEvent } from 'react'
+import { FC, useState, Dispatch, SetStateAction, ChangeEvent, KeyboardEvent, useContext } from 'react'
+import { motion } from "framer-motion"
 import { Item } from '../model/item';
 import style from './addingTodo.module.css'
+import { NotificationContext } from '../../TodoApp'
+import { Notification } from '../model/notification';
+import { TodoEvent } from '../model/todo-event';
 
 type Props = {
     items: Item[]
@@ -32,7 +36,7 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
         setItem({value: "", id: id++});
     }
 
-    const onEnterPress = (updateTodoListFunc: (arg : Item[]) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
+    const onEnterPress = (updateTodoListFunc: (arg : Item[]) => void, setNotification: (arg : Notification) => any) => (event: KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter'){
             const newItem = {
                 id: id++,
@@ -41,8 +45,11 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
     
             value && updateTodoListFunc([...items, newItem]);
             setItem({value: "", id: id++});
+            setNotification({isShowing:true, taskName: value, todoEvent: TodoEvent.ADDED});
         }
     }
+
+    const NotificationCtx : any = useContext(NotificationContext);
   
     return <div className={style.container}>
         <h2> Which task do you want to add?</h2>
@@ -51,12 +58,17 @@ export const AddingTodoInput: FC<Props> = ({items, updateTodoList} : Props) => {
             id="input_todo" 
             value={value} 
             onChange={updateItemValue(setItem)}
-            onKeyPress={onEnterPress(updateTodoList)}
+            onKeyPress={onEnterPress(updateTodoList, NotificationCtx)}
             >
         </input>
-        <button 
+        <motion.button
+            whileHover={{ 
+                scale: 1.1,
+                transition: { duration: 0.1 }, 
+            }}
+            onHoverStart={e => {}}
+            onHoverEnd={e => {}}
             name="button_submit"
-            className= {style['scale-up']}
-            onClick={onAddButton(updateTodoList)}>Add</button>
+            onClick={onAddButton(updateTodoList)}>Add</motion.button>
     </div>
 }
