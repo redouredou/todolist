@@ -1,35 +1,40 @@
-import { useRef, useEffect, useContext, Dispatch, SetStateAction} from 'react';
+import { useRef, useEffect} from 'react';
 import { Item } from './model/item';
 import { TodoItem } from './TodoItem';
 import { FC } from 'react'
 import style from './todos.module.css';
 import { motion, AnimatePresence, useMotionValue} from 'framer-motion';
-import { Notification } from './model/notification';
-import { TodoEvent } from '../todos/model/todo-event'
-import { NotificationContext } from '../../src/TodoApp';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { NotificationAC, State } from '../../state';
+import { hideNotificationPopup } from '../../state/action-creators/notification';
 
-type TodoListProps = {
-    items: Item[]
-    updateTodoList: (arg: Item[]) => void
-}
 
-export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListProps) => {
+export const TodoList: FC = () => {
+    const todos = useSelector((state: State) => state.todos);
+
+
     const prevItems = useRef<Item[]>();
 
     useEffect(() => {
-        prevItems.current = items;
+        prevItems.current = todos;
     });
 
-    const removeTodoById = (id: number, setNotification: (arg: Notification ) => void ) => {
-        const newItems = [...items].filter(item => item.id != id)
-        const deletedItemName = items.filter(item => item.id === id)[0].value;
+    const dispatch = useDispatch();
+    const { showNotificationTodoDeleted } = bindActionCreators(NotificationAC, dispatch)
+
+
+
+    const removeTodoById = (id: number) => {
+        const newItems = [...todos].filter(item => item.id != id)
+        const deletedItemName = todos.filter(item => item.id === id)[0].value;
         
-        setNotification({isShowing: true, taskName: deletedItemName, todoEvent: TodoEvent.DELETED});
-        updateTodoList(newItems)
+        hideNotificationPopup();
+     //   updateTodoList(newItems)
     }
 
     const moveUp = (index: number) => {
-        const newItems = [...items];
+        const newItems = [...todos];
 
         let itemTmp: Item = { id: null, value: null };
 
@@ -37,21 +42,21 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
             itemTmp = newItems[index - 1]
             newItems[index - 1] = newItems[index]
             newItems[index] = itemTmp
-            updateTodoList(newItems)
+     //       updateTodoList(newItems)
         }
 
     }
 
     const moveDown = (index: number) => {
-        const newItems = [...items];
+        const newItems = [...todos];
 
         let itemTmp: Item = { id: null, value: null };
 
-        if (index != items.length - 1) {
+        if (index != todos.length - 1) {
             itemTmp = newItems[index + 1]
             newItems[index + 1] = newItems[index]
             newItems[index] = itemTmp
-            updateTodoList(newItems)
+       //     updateTodoList(newItems)
         }
     }
 
@@ -68,11 +73,9 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
 
       const y = useMotionValue(50)
 
-      const NotificationCtx: Dispatch<SetStateAction<Notification>> = useContext(NotificationContext);
-
-    return items && <motion.ul>
+    return todos && <motion.ul>
         <AnimatePresence>
-            {items.map((item, index) => {
+            {todos.map((item, index) => {
                 return <motion.li
                     key={item.id}
                     animate={{ y: 30 }}
@@ -85,7 +88,6 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
                         value={item.value}
                         id={item.id}
                         isEdit={false}
-                        removeTodoById={() => removeTodoById(item.id, NotificationCtx)}
                         index={index}
                         moveUp={moveUp}
                         moveDown={moveDown} />
