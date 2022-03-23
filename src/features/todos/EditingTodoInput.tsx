@@ -1,4 +1,7 @@
 import { FC,useState, Dispatch, SetStateAction, ChangeEvent } from 'react'
+import { useDispatch } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { NotificationAC, TodoAC } from '../../state'
 
 type TodoItemState = {
     isEdit: boolean
@@ -7,32 +10,29 @@ type TodoItemState = {
 }
 
 type EditionTodoInputProps = {
+    currentId: number
     currentValue: string
-    setStateTodoItem: (arg: TodoItemState) => void;
+    setIsEdit: (arg: any) => void;
 }
 
-const modifyTodo = (updateEditingTodoInputState: Dispatch<SetStateAction<string>>) => (e: ChangeEvent<HTMLInputElement>) => {
-    updateEditingTodoInputState(e.target.value);
-}
+export const EditingTodoInput : FC<EditionTodoInputProps> = ({currentId, currentValue, setIsEdit}) => {
 
-const validateEdition = (updateTodoItemState : Dispatch<SetStateAction<TodoItemState>>, todoValueInput: string) => {
+    const dispatch = useDispatch();
+    const { showNotificationTodoModified } = bindActionCreators(NotificationAC, dispatch)
+    const { modifyTodofromTodoList } = bindActionCreators(TodoAC, dispatch)
 
-    updateTodoItemState(prevState => ({...prevState, isEdit: false, todoValue: todoValueInput}))
-}
-
-const cancelEdition = (updateTodoItemState : Dispatch<SetStateAction<TodoItemState>>) => {
-    updateTodoItemState(prevState => ({...prevState, isEdit: false }))
-}
-
-
-export const EditingTodoInput : FC<EditionTodoInputProps> = ({currentValue, setStateTodoItem}) => {
-
+    const validateEdition = ( todoValueInput: string) => {
+        modifyTodofromTodoList({id: currentId, value: todoValueInput})
+        showNotificationTodoModified({id: currentId, value: currentValue, modifiedValue: todoValueInput})
+        setIsEdit(false);
+    }
+    
 
     const [todoValueInput, setTodoValueInput] = useState<string>(currentValue)
 
     return <>
-            <input type="text" id="input_todo" defaultValue={currentValue} onChange = {modifyTodo(setTodoValueInput)}></input>
-            <button type="button" name="validate_edition" onClick = {() => validateEdition(setStateTodoItem, todoValueInput)}>Validate</button>
-            <button type="button" name="cancel_edition" onClick = {() => cancelEdition(setStateTodoItem)}>Cancel</button>
+            <input type="text" id="input_todo" defaultValue={currentValue} onChange = {(e) => setTodoValueInput(e.target.value)}></input>
+            <button type="button" name="validate_edition" onClick = {() => validateEdition(todoValueInput)}>Validate</button>
+            <button type="button" name="cancel_edition" onClick = {() => setIsEdit(false)}>Cancel</button>
         </>
 }

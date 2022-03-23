@@ -27,7 +27,8 @@ const notificationReducer = (state: Notification = initialState, action: Notific
         case NotificationTypes.NOTIFICATION_TODO_MODIFIED:
                 return {
                     isShowing: true,
-                    notificationMessage: `You are modified the task "${action.payload.value}" to gnagna!`
+                    notificationMessage: `You are modified the task "${action.payload.value}" to "${action.payload.modifiedValue}"!`,
+                    cssClass: 'container-notification-modify'
                 }
         case NotificationTypes.NOTIFICATION_HIDE:
                 return {isShowing: false}

@@ -18,6 +18,17 @@
     justify-content: center;
 }
 
+.container-notification-modify{
+    position: absolute;
+    top:-60px;
+    width: 100%;
+    height: 60px;
+    background-color: crimson;
+    display: flex;
+    justify-content: center;
+}
+
+
 p{
     color: white;
 }
