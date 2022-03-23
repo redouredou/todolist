@@ -21,7 +21,7 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
     });
 
     const removeTodoById = (id: number, setNotification: (arg: Notification ) => void ) => {
-        const newItems = [...items].filter(item => item.id != id)
+        const newItems = items.filter(item => item.id != id)
         const deletedItemName = items.filter(item => item.id === id)[0].value;
         
         setNotification({isShowing: true, taskName: deletedItemName, todoEvent: TodoEvent.DELETED});
@@ -33,10 +33,11 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
 
         let itemTmp: Item = { id: null, value: null };
 
-        if (index != 0) {
-            itemTmp = newItems[index - 1]
+        if (index !== 0) {
+            /*itemTmp = newItems[index - 1]
             newItems[index - 1] = newItems[index]
-            newItems[index] = itemTmp
+            newItems[index] = itemTmp*/
+            [newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]] 
             updateTodoList(newItems)
         }
 
@@ -47,7 +48,7 @@ export const TodoList: FC<TodoListProps> = ({ items, updateTodoList }: TodoListP
 
         let itemTmp: Item = { id: null, value: null };
 
-        if (index != items.length - 1) {
+        if (index !== items.length - 1) {
             itemTmp = newItems[index + 1]
             newItems[index + 1] = newItems[index]
             newItems[index] = itemTmp

@@ -14,7 +14,7 @@ export const NotificationPopup : FC<NotificationProps> =  ({ notification, setNo
 
     const {todoEvent, taskName} = notification
 
-    const displayMessage = (todoEvent: TodoEvent, value: string) => {
+    const displayMessage = (todoEvent: TodoEvent, value: string) : string => {
         switch(todoEvent){
             case TodoEvent.ADDED:
                 return `You are added the task "${value}", Well done!`;
