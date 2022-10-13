@@ -9,9 +9,9 @@ const todoReducer = (state: Item[] = [], action: TodoAction) => {
         case TodoTypes.TODO_ADD:
             return [...state, action.payload];
         case TodoTypes.TODO_DELETE:
-            return [...state].filter(itemElt => itemElt.id != action.payload.id);
+            return state.filter(itemElt => itemElt.id !== action.payload.id);
         case TodoTypes.TODO_MODIFY:
-            return  [...state].map(itemElt => {
+            return state.map(itemElt => {
                 if (itemElt.id === action.payload.id){
                     return action.payload;
                 }
